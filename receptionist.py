@@ -1,5 +1,6 @@
 from __future__ import annotations
 from employee import Employee
+from monitor import get_actual_day_of_work
 
 
 class Receptionist(Employee):
@@ -18,17 +19,18 @@ class Receptionist(Employee):
     """
 
     def __init__(self, name: str, birth: str, date_enter_company: str,
-                 position: str, status: int, fixed_salary: int,
-                 work_day: float) -> None:
+                 position: int, status: int, expected_work_day: float,
+                 day_off: int, bank: str, bank_name: str) -> None:
         """
         Initialize the receptionist
 
         Precondition: fixed_salary must be a non-negative float
         """
         super().__init__(name, birth, date_enter_company, position, status,
-                         fixed_salary, work_day)
+                         expected_work_day, day_off, bank, bank_name)
+        self.fixed_salary = 4500000.0
 
-    def get_commission(self) -> float:
+    def get_commission(self, performance) -> float:
         """
         Receptionist does not have commission salary
         """
@@ -41,9 +43,19 @@ class Receptionist(Employee):
         day_of_work: the actual amount of days the receptionist
         worked for a month
         """
-        total_day_of_work = day_of_work / self.work_day
+        total_day_of_work = day_of_work / self.expected_work_day
         salary = total_day_of_work * self.fixed_salary
         return salary
+
+    def get_total_salary(self) -> float:
+        """
+        Return the *final* salary of this person
+        :return:
+        """
+        cc = get_actual_day_of_work()
+        day_of_w = cc.get(self.name)
+        num = self.get_fixed_salary(day_of_work=day_of_w)
+        return num
 
     def get_team_bonus(self) -> float:
         """

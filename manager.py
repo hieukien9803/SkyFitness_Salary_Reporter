@@ -19,17 +19,17 @@ class Manager(Employee):
     """
 
     def __init__(self, name: str, birth: str, date_enter_company: str,
-                 position: str, status: int, fixed_salary: int,
-                 work_day: float) -> None:
+                 position: int, status: int, expected_work_day: float,
+                 day_off: int, bank: str, bank_name: str) -> None:
         """
         Initialize an employee with name, birth, and fixed_salary
 
         Precondition: fixed_salary must be a non-negative float
         """
         super().__init__(name, birth, date_enter_company, position, status,
-                         fixed_salary, work_day)
+                         expected_work_day, day_off, bank, bank_name)
 
-    def get_commission(self) -> float:
+    def get_commission(self, performance) -> float:
         """
         Get the commission for the manager depends on his performance
 

@@ -46,7 +46,7 @@ class Employee:
 
         Precondition: fixed_salary and work_day must be non-negative integers
         """
-        self._name = name
+        self.name = name
         self._birth = birth
         self._date_enter_company = date_enter_company
         self.position = position
@@ -61,9 +61,9 @@ class Employee:
         Print function for employee for testing purposes
         :return: none
         """
-        return 'Employee(name=' + str(self._name) +\
+        return 'Employee(name=' + str(self.name) +\
                ', birth=' + str(self._birth) + ', date_enter_company=' + str(self._date_enter_company) \
-               + ', position=' + str(self.position) + ', status' + str(self.status) + ', day_off=' + str(self.day_off) + \
+               + ', position=' + str(self.position) + ', status=' + str(self.status) + ', day_off=' + str(self.day_off) + \
                ', expected_work_day=' + str(self.expected_work_day) + ', bank=' + str(self.bank) + ', bank_name=' + str(self.bank_name)
 
     def get_commission(self, performance) -> float:
@@ -74,6 +74,13 @@ class Employee:
         raise NotImplementedError("Implemented in a subclass")
 
     def get_fixed_salary(self, day_of_work: float) -> float:
+        """
+        This function should be implemented in the subclasses.
+        (ie. PT, Sale, Manager, Receptionist, Janitor, Security)
+        """
+        raise NotImplementedError("Implemented in a subclass")
+
+    def get_total_salary(self) -> float:
         """
         This function should be implemented in the subclasses.
         (ie. PT, Sale, Manager, Receptionist, Janitor, Security)

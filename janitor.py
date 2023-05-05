@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from monitor import get_actual_day_of_work
 from employee import Employee
 
 
@@ -16,17 +17,18 @@ class Janitor(Employee):
     """
 
     def __init__(self, name: str, birth: str, date_enter_company: str,
-                 position: str, status: int, fixed_salary: int,
-                 work_day: float) -> None:
+                 position: int, status: int, expected_work_day: float,
+                 day_off: int, bank: str, bank_name: str) -> None:
         """
         Initialize the janitor
 
         Precondition: fixed_salary must be a non-negative float
         """
         super().__init__(name, birth, date_enter_company, position, status,
-                         fixed_salary, work_day)
+                         expected_work_day, day_off, bank, bank_name)
+        self.fixed_salary_per_day = 200000.0
 
-    def get_commission(self) -> float:
+    def get_commission(self, performance) -> float:
         """
         Janitor does not have commission salary, return 0.0
         """
@@ -38,4 +40,15 @@ class Janitor(Employee):
 
         day_of_work: the amount of days the janitor worked for a month
         """
-        return self.fixed_salary * day_of_work
+        return self.fixed_salary_per_day * day_of_work
+
+    def get_total_salary(self) -> float:
+        """
+        Get final salary of this person
+        :return:
+        """
+        cc = get_actual_day_of_work()
+        work_day = cc.get(self.name)
+        num = self.get_fixed_salary(day_of_work=work_day)
+        return num
+
