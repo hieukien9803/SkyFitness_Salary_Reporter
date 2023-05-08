@@ -74,7 +74,7 @@ class PersonalTrainer(Employee):
         pt actual attendance versus their expected attendance
         :return: float
         """
-        salary = (day_of_work / self.expected_work_day) * self._fixed_salary
+        salary = day_of_work * (self._fixed_salary / self.expected_work_day)
         return salary
 
     def get_total_salary(self) -> float:
@@ -83,12 +83,10 @@ class PersonalTrainer(Employee):
         :return:
         """
         cc = get_actual_day_of_work()
-        print(cc)
-        pp = get_performance_report()
         day_of_w = cc.get(self.name)
         print(day_of_w)
+        pp = get_performance_report()
         performance = pp.get(self.name)
-        print(performance)
         num = self.get_fixed_salary(day_of_work=day_of_w)
         num2 = self.get_commission(performance=performance)
         return num + (performance * num2)
@@ -184,7 +182,6 @@ def get_pt_month_session() -> dict:
     pt_detail_f = pd.DataFrame(pt_detail_file,
                                columns=['Đức', 'Hưng', 'Đồng', 'Hùng Anh',
                                         'SB1', 'SB2', 'SB3', 'SB4'])
-    # print(pt_detail_f)
     total_session = {}
     temp = []
     for index, row in pt_detail_f.iterrows():

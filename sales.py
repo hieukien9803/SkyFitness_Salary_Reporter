@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from monitor import get_actual_day_of_work, get_performance_report
+from monitor import get_actual_day_of_work, get_performance_report, split_list
 from employee import Employee
 import pandas as pd
 
@@ -73,11 +73,11 @@ class Sale(Employee):
         day_of_work: the actual amount of days the sale person
         worked for a month
         """
-        salary = (day_of_work / self.expected_work_day) * self._fixed_salary
-        #print('fixed = ' + str(self._fixed_salary))
-        #print('expected work = ' + str(self.expected_work_day))
-        #print('actual day = ' + str(day_of_work))
-        #print(salary)
+        salary = day_of_work * (self._fixed_salary / self.expected_work_day)
+        print('fixed = ' + str(self._fixed_salary))
+        print('expected work = ' + str(self.expected_work_day))
+        print('actual day = ' + str(day_of_work))
+        print(salary)
         return salary
 
     def get_total_salary(self) -> float:
@@ -100,11 +100,6 @@ class Sale(Employee):
         Get the team bonus salary if applicable according to the logic file
         """
         pass
-
-
-def split_list(lst, n):
-    """Split a list into sublists containing n elements."""
-    return [lst[i:i + n] for i in range(0, len(lst), n)]
 
 
 def get_sale_logic_file() -> dict:

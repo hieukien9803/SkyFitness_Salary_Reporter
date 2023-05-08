@@ -4,6 +4,11 @@ import pandas as pd
 from typing import List
 
 
+def split_list(lst, n):
+    """Split a list into sublists containing n elements."""
+    return [lst[i:i + n] for i in range(0, len(lst), n)]
+
+
 def get_actual_day_of_work() -> dict:
     """
     Read the file then calculate the actual day of work for each employee
@@ -60,5 +65,3 @@ def get_performance_report() -> dict:
                 report[str(row['Sale'])] += vip + gym + pt
 
     return report
-
-
