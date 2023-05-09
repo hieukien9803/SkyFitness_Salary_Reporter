@@ -46,22 +46,23 @@ class Sale(Employee):
         for i in range(len(logic)):
             if '<' in logic[i][0]:
                 num = logic[i][0].split('<')
-                if performance < float(num[1])*1000000:
+                if performance < float(num[1]) * 1000000:
                     percent = logic[i][1]
                     bonus = logic[i][2]
             elif '-' in logic[i][0]:
                 num = logic[i][0].split("-")
-                if float(num[0])*1000000 <= performance < float(num[1])*1000000:
+                if float(num[0]) * 1000000 <= performance < float(
+                        num[1]) * 1000000:
                     percent = logic[i][1]
                     bonus = logic[i][2]
             elif '>' in logic[i][0]:
                 num = logic[i][0].split('>')
-                if performance > float(num[1])*1000000:
+                if performance > float(num[1]) * 1000000:
                     percent = logic[i][1]
                     bonus = logic[i][2]
 
         if bonus > 0:
-            num = (percent * (bonus/100)) / 100
+            num = (percent * (bonus / 100)) / 100
         else:
             num = percent / 100
         return num
@@ -74,10 +75,10 @@ class Sale(Employee):
         worked for a month
         """
         salary = day_of_work * (self._fixed_salary / self.expected_work_day)
-        print('fixed = ' + str(self._fixed_salary))
-        print('expected work = ' + str(self.expected_work_day))
-        print('actual day = ' + str(day_of_work))
-        print(salary)
+        # print('fixed = ' + str(self._fixed_salary))
+        # print('expected work = ' + str(self.expected_work_day))
+        # print('actual day = ' + str(day_of_work))
+        # print(salary)
         return salary
 
     def get_total_salary(self) -> float:

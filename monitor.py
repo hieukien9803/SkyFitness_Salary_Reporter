@@ -24,11 +24,10 @@ def get_actual_day_of_work() -> dict:
 
     for index, row in dw_f.iterrows():
         if str(row['Tên NV']).lower() != 'nan':
-            if row['Tên NV'] not in cc.keys():
-                cc[row['Tên NV']] = round(float(row['Ngày công']), 2)
+            if str(row['Tên NV']).strip() not in cc.keys():
+                cc[str(row['Tên NV']).strip()] = float(row['Ngày công'])
             else:
-                cc[row['Tên NV']] += round(float(row['Ngày công']), 2)
-
+                cc[str(row['Tên NV']).strip()] += float(row['Ngày công'])
     return cc
 
 
@@ -42,7 +41,6 @@ def get_performance_report() -> dict:
     salary_file = pd.read_excel('input-file/Bao-cao-CD-thang-02-2023.xlsx',
                                 sheet_name='PS')
     sa_f = pd.DataFrame(salary_file, columns=['Sale', 'VIP', 'GYM', 'PT/KB'])
-    # print(sa_f)
     report = {}
     for index, row in sa_f.iterrows():
         if str(row['Sale']).lower() != 'nan':
@@ -60,8 +58,9 @@ def get_performance_report() -> dict:
             else:
                 pt = float(row['PT/KB'])
             if row['Sale'] not in report.keys():
-                report[str(row['Sale'])] = vip + gym + pt
+                report[row['Sale']] = vip + gym + pt
             else:
-                report[str(row['Sale'])] += vip + gym + pt
+                report[row['Sale']] += vip + gym + pt
 
     return report
+

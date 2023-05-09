@@ -40,7 +40,8 @@ class Janitor(Employee):
 
         day_of_work: the amount of days the janitor worked for a month
         """
-        return self.fixed_salary_per_day * day_of_work
+        salary = day_of_work * self.fixed_salary_per_day
+        return salary
 
     def get_total_salary(self) -> float:
         """

@@ -1,6 +1,7 @@
 from __future__ import annotations
 from employee import Employee
 from monitor import get_actual_day_of_work
+import pandas as pd
 
 
 class Receptionist(Employee):
@@ -28,7 +29,8 @@ class Receptionist(Employee):
         """
         super().__init__(name, birth, date_enter_company, position, status,
                          expected_work_day, day_off, bank, bank_name)
-        self.fixed_salary = 4500000.0
+        self.file = get_receptionist_logic()
+        self._fixed_salary = self.file.get(status)
 
     def get_commission(self, performance) -> float:
         """
@@ -43,8 +45,7 @@ class Receptionist(Employee):
         day_of_work: the actual amount of days the receptionist
         worked for a month
         """
-        total_day_of_work = day_of_work / self.expected_work_day
-        salary = total_day_of_work * self.fixed_salary
+        salary = day_of_work * (self._fixed_salary / self.expected_work_day)
         return salary
 
     def get_total_salary(self) -> float:
@@ -63,3 +64,22 @@ class Receptionist(Employee):
         (ie. PT, Sale, Manager, Receptionist)
         """
         pass
+
+
+def get_receptionist_logic() -> dict:
+    """
+
+    :return:
+    """
+    re_file = pd.read_excel('logic-file/receptionist-logic.xlsx')
+    re_f = pd.DataFrame(re_file, columns=['Vị Trí', 'Lương cơ bản'])
+    re_logic = {}
+
+    for index, row in re_f.iterrows():
+        if str(row['Vị Trí']).lower() != 'nan':
+            re_logic[row['Vị Trí']] = int(row['Lương cơ bản'])
+
+    return re_logic
+
+
+

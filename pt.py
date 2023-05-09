@@ -48,17 +48,17 @@ class PersonalTrainer(Employee):
         for i in range(len(logic)):
             if '<' in logic[i][0]:
                 num = logic[i][0].split('<')
-                if performance < int(num[1]):
+                if performance < float(num[1]) * 1000000:
                     percent_base = logic[i][1]
                     percent_contract = logic[i][2]
             elif '-' in logic[i][0]:
                 num = logic[i][0].split("-")
-                if int(num[0]) <= performance < int(num[1]):
+                if float(num[0]) * 1000000 <= performance < float(num[1]) * 1000000:
                     percent_base = logic[i][1]
                     percent_contract = logic[i][2]
             elif '>' in logic[i][0]:
                 num = logic[i][0].split('>')
-                if performance > int(num[1]):
+                if performance > float(num[1]) * 1000000:
                     percent_base = logic[i][1]
                     percent_contract = logic[i][2]
 
@@ -85,10 +85,15 @@ class PersonalTrainer(Employee):
         cc = get_actual_day_of_work()
         day_of_w = cc.get(self.name)
         print(day_of_w)
+        print(cc)
+
         pp = get_performance_report()
         performance = pp.get(self.name)
-        num = self.get_fixed_salary(day_of_work=day_of_w)
+        print(performance)
+
         num2 = self.get_commission(performance=performance)
+        num = self.get_fixed_salary(day_of_work=day_of_w)
+
         return num + (performance * num2)
 
     def get_team_bonus(self) -> float:

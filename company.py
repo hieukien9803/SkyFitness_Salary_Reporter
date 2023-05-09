@@ -129,19 +129,14 @@ def create_employee_list() -> List[Employee]:
 # for i in range(len(ef)):
 #    print(ef[i])
 
-a = get_actual_day_of_work()
-print(a)
+# a = get_actual_day_of_work()
+# print(a)
 
 # a = get_salary_report()
 # print(a)
 
 a = create_employee_list()
 for i in range(len(a)):
-    if a[i].position == 3:
-        print(a[i])
-        b = a[i].get_total_salary()
-        print(a[i].name + ' = ' + str(b))
+    b = a[i].get_total_salary()
+    print(a[i].name + ' = ' + str(b))
     # print(a[i])
-    # if a[i].position == 2:
-    #    b = a[i].get_total_salary()
-    #    print(a[i].name + ' = ' + str(b))
