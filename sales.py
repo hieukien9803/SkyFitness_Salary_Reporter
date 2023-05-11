@@ -34,7 +34,7 @@ class Sale(Employee):
         salary = self.file.get(status)
         self._fixed_salary = salary.get('base')
 
-    def get_commission(self, performance: float) -> float:
+    def get_commission(self, performance: float) -> tuple:
         """
         Get the commission for a sale depends on the performance
         performance: the amount of money the sale made this month
@@ -61,11 +61,7 @@ class Sale(Employee):
                     percent = logic[i][1]
                     bonus = logic[i][2]
 
-        if bonus > 0:
-            num = (percent * (bonus / 100)) / 100
-        else:
-            num = percent / 100
-        return num
+        return percent / 100, bonus / 100
 
     def get_fixed_salary(self, day_of_work: float) -> float:
         """
@@ -92,9 +88,9 @@ class Sale(Employee):
         day_of_w = cc.get(self.name)
         performance = pp.get(self.name)
 
-        num = self.get_fixed_salary(day_of_work=day_of_w)
-        num2 = self.get_commission(performance=performance)
-        return num + (performance * num2)
+        fix_sala = self.get_fixed_salary(day_of_work=day_of_w)
+        num = self.get_commission(performance=performance)
+        return (num[0] * fix_sala) + (performance * num[1])
 
     def get_team_bonus(self) -> float:
         """

@@ -137,6 +137,7 @@ def create_employee_list() -> List[Employee]:
 
 a = create_employee_list()
 for i in range(len(a)):
+
     b = a[i].get_total_salary()
     print(a[i].name + ' = ' + str(b))
     # print(a[i])

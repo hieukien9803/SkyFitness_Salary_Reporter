@@ -36,37 +36,65 @@ class PersonalTrainer(Employee):
         salary = self.file.get(status)
         self._fixed_salary = salary.get('base')
 
-    def get_commission(self, performance) -> float:
+    def get_commission(self, performance) -> tuple:
         """
         Get the commission for a personal trainer depends on the performance
 
         """
+        ps = get_pt_month_session()
+        list_of_ppl = ps.get(self.name)
         lg = self.file.get(self.position)
         logic = lg.get('logic')
         percent_base = 0
         percent_contract = 0
+        percent_session = 0
+
+        if performance == None:
+            performance = 0.0
+
         for i in range(len(logic)):
             if '<' in logic[i][0]:
                 num = logic[i][0].split('<')
                 if performance < float(num[1]) * 1000000:
                     percent_base = logic[i][1]
                     percent_contract = logic[i][2]
+                    if len(list_of_ppl) <= 40:
+                        percent_session = logic[i][3]
+                    elif 41 <= len(list_of_ppl) <= 70:
+                        percent_session = logic[i][4]
+                    elif 71 <= len(list_of_ppl) <= 100:
+                        percent_session = logic[i][5]
+                    elif len(list_of_ppl) > 100:
+                        percent_session = logic[i][6]
             elif '-' in logic[i][0]:
                 num = logic[i][0].split("-")
-                if float(num[0]) * 1000000 <= performance < float(num[1]) * 1000000:
+                if float(num[0]) * 1000000 <= performance < float(
+                        num[1]) * 1000000:
                     percent_base = logic[i][1]
                     percent_contract = logic[i][2]
+                    if len(list_of_ppl) <= 40:
+                        percent_session = logic[i][3]
+                    elif 41 <= len(list_of_ppl) <= 70:
+                        percent_session = logic[i][4]
+                    elif 71 <= len(list_of_ppl) <= 100:
+                        percent_session = logic[i][5]
+                    elif len(list_of_ppl) > 100:
+                        percent_session = logic[i][6]
             elif '>' in logic[i][0]:
                 num = logic[i][0].split('>')
                 if performance > float(num[1]) * 1000000:
                     percent_base = logic[i][1]
                     percent_contract = logic[i][2]
+                    if len(list_of_ppl) <= 40:
+                        percent_session = logic[i][3]
+                    elif 41 <= len(list_of_ppl) <= 70:
+                        percent_session = logic[i][4]
+                    elif 71 <= len(list_of_ppl) <= 100:
+                        percent_session = logic[i][5]
+                    elif len(list_of_ppl) > 100:
+                        percent_session = logic[i][6]
 
-        if percent_contract > 0:
-            num = (percent_base / 100) * (percent_contract / 100)
-        else:
-            num = percent_base / 100
-        return num
+        return percent_base / 100, percent_contract / 100, percent_session / 100
 
     def get_fixed_salary(self, day_of_work: float) -> float:
         """
@@ -84,17 +112,33 @@ class PersonalTrainer(Employee):
         """
         cc = get_actual_day_of_work()
         day_of_w = cc.get(self.name)
-        print(day_of_w)
-        print(cc)
 
         pp = get_performance_report()
         performance = pp.get(self.name)
-        print(performance)
 
-        num2 = self.get_commission(performance=performance)
-        num = self.get_fixed_salary(day_of_work=day_of_w)
+        ss = get_pt_month_session()
+        sp = get_pt_price_session_report()
+        list_of_ppl = ss.get(self.name)
+        total = 0.0
+        for i in range(len(list_of_ppl)):
+            if list_of_ppl[i] in sp.keys():
+                price = sp.get(list_of_ppl[i])
+            else:
+                price = 0.0
+                print("hop dong doc sai (du lieu unclean) = " + str(list_of_ppl[i]))
+            total += price
 
-        return num + (performance * num2)
+        num = self.get_commission(performance=performance)
+        fix_sala = self.get_fixed_salary(day_of_work=day_of_w)
+
+        if performance is None:
+            performance = 0.0
+
+        percent_base = num[0]
+        percent_performance = num[1]
+        percent_session = num[2]
+
+        return (percent_base * fix_sala) + (performance * percent_performance) + (total * percent_session)
 
     def get_team_bonus(self) -> float:
         """
@@ -171,7 +215,7 @@ def get_pt_price_session_report() -> dict:
     report = {}
     for index, row in pt_f.iterrows():
         if str(row['Giá trị 1 buổi']).lower() != 'nan':
-            report[str(row['Danh sách hội viên']).replace(' ', '')] = float(
+            report[str(row['Danh sách hội viên'].strip())] = float(
                 row['Giá trị 1 buổi'])
 
     return report
@@ -185,38 +229,37 @@ def get_pt_month_session() -> dict:
     pt_detail_file = pd.read_excel('input-file/Bao-cao-CD-thang-02-2023.xlsx',
                                    sheet_name='Chi Tiết PT')
     pt_detail_f = pd.DataFrame(pt_detail_file,
-                               columns=['Đức', 'Hưng', 'Đồng', 'Hùng Anh',
+                               columns=['Phạm Trung Đức', 'Nguyễn Văn Hưng', 'Phạm Thành Đồng', 'Lê Hùng Anh',
                                         'SB1', 'SB2', 'SB3', 'SB4'])
     total_session = {}
     temp = []
     for index, row in pt_detail_f.iterrows():
-        if str(row['Đức']).lower() != 'nan':
+        if str(row['Phạm Trung Đức']).lower() != 'nan':
             if str(row['SB1']) != 'nan':
-                temp.append(str(row['Đức']))
-    total_session['Đức'] = temp
+                temp.append(str(row['Phạm Trung Đức']))
+    total_session['Phạm Trung Đức'] = temp
 
     temp = []
     for index, row in pt_detail_f.iterrows():
-        if str(row['Hưng']).lower() != 'nan':
+        if str(row['Nguyễn Văn Hưng']).lower() != 'nan':
             if str(row['SB2']) != 'nan':
-                temp.append(str(row['Hưng']))
-    total_session['Hưng'] = temp
+                temp.append(str(row['Nguyễn Văn Hưng']))
+    total_session['Nguyễn Văn Hưng'] = temp
 
     temp = []
     for index, row in pt_detail_f.iterrows():
-        if str(row['Đồng']).lower() != 'nan':
+        if str(row['Phạm Thành Đồng']).lower() != 'nan':
             if str(row['SB3']) != 'nan':
-                temp.append(str(row['Đồng']))
-    total_session['Đồng'] = temp
+                temp.append(str(row['Phạm Thành Đồng']))
+    total_session['Phạm Thành Đồng'] = temp
 
     temp = []
     for index, row in pt_detail_f.iterrows():
-        if str(row['Hùng Anh']).lower() != 'nan':
+        if str(row['Lê Hùng Anh']).lower() != 'nan':
             if str(row['SB4']) != 'nan':
-                temp.append(str(row['Hùng Anh']))
-    total_session['Hùng Anh'] = temp
+                temp.append(str(row['Lê Hùng Anh']))
+    total_session['Lê Hùng Anh'] = temp
 
     return total_session
 
-# a = get_pt_month_session()
-# print(a)
+
