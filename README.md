@@ -5,7 +5,8 @@ In order to keep data clean, employees would have to follow a pipeline in order 
 Here are the list of things to take in consideration before using this machine:
 1) check the number of weekday and weekend for security
 2) check the month number on manager file (change every month)
-3) data cleaning, mase sure the employee follow the instruction for data input
+3) check number of day off for each month
+4) data cleaning, mase sure the employee follow the instruction for data input
 
 IMPORTANT: the input file is not included here since it is private to SkyFitness ONLY
 
