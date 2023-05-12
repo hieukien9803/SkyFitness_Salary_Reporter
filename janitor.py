@@ -49,7 +49,7 @@ class Janitor(Employee):
         :return:
         """
         cc = get_actual_day_of_work()
-        work_day = cc.get(self.name)
+        work_day = cc.get(self.name) + self.day_off
         num = self.get_fixed_salary(day_of_work=work_day)
         return num
 

@@ -17,7 +17,7 @@ def get_actual_day_of_work() -> dict:
 
     :return: dict
     """
-    dw_file = pd.read_excel('input-file/Bao-cao-CD-thang-02-2023.xlsx',
+    dw_file = pd.read_excel('input-file/Bao-cao-CD-thang-04-2023.xlsx',
                             sheet_name='C.C')
     dw_f = pd.DataFrame(dw_file, columns=['Tên NV', 'Ngày công'])
     cc = {}
@@ -38,7 +38,7 @@ def get_performance_report() -> dict:
 
     :return: dict
     """
-    salary_file = pd.read_excel('input-file/Bao-cao-CD-thang-02-2023.xlsx',
+    salary_file = pd.read_excel('input-file/Bao-cao-CD-thang-04-2023.xlsx',
                                 sheet_name='PS')
     sa_f = pd.DataFrame(salary_file, columns=['Sale', 'VIP', 'GYM', 'PT/KB'])
     report = {}

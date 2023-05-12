@@ -85,7 +85,7 @@ class Sale(Employee):
         cc = get_actual_day_of_work()
         pp = get_performance_report()
 
-        day_of_w = cc.get(self.name)
+        day_of_w = cc.get(self.name) + self.day_off
         performance = pp.get(self.name)
 
         fix_sala = self.get_fixed_salary(day_of_work=day_of_w)

@@ -54,7 +54,7 @@ class Receptionist(Employee):
         :return:
         """
         cc = get_actual_day_of_work()
-        day_of_w = cc.get(self.name)
+        day_of_w = cc.get(self.name) + self.day_off
         num = self.get_fixed_salary(day_of_work=day_of_w)
         return num
 

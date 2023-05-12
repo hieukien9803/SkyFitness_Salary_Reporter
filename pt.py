@@ -43,6 +43,8 @@ class PersonalTrainer(Employee):
         """
         ps = get_pt_month_session()
         list_of_ppl = ps.get(self.name)
+        if list_of_ppl == None:
+            list_of_ppl = []
         lg = self.file.get(self.position)
         logic = lg.get('logic')
         percent_base = 0
@@ -102,7 +104,11 @@ class PersonalTrainer(Employee):
         pt actual attendance versus their expected attendance
         :return: float
         """
+        print(self._fixed_salary)
+        print(day_of_work)
+        print(self.expected_work_day)
         salary = day_of_work * (self._fixed_salary / self.expected_work_day)
+
         return salary
 
     def get_total_salary(self) -> float:
@@ -111,14 +117,20 @@ class PersonalTrainer(Employee):
         :return:
         """
         cc = get_actual_day_of_work()
-        day_of_w = cc.get(self.name)
+        print(cc)
+        print(self.day_off)
+        print(cc.get(self.name))
+        day_of_w = cc.get(self.name) + self.day_off
 
         pp = get_performance_report()
         performance = pp.get(self.name)
 
         ss = get_pt_month_session()
         sp = get_pt_price_session_report()
+        print(sp)
         list_of_ppl = ss.get(self.name)
+        if list_of_ppl == None:
+            list_of_ppl = []
         total = 0.0
         for i in range(len(list_of_ppl)):
             if list_of_ppl[i] in sp.keys():
@@ -208,7 +220,7 @@ def get_pt_price_session_report() -> dict:
     each session cost
     :return: dict
     """
-    pt_file = pd.read_excel('input-file/Bao-cao-CD-thang-02-2023.xlsx',
+    pt_file = pd.read_excel('input-file/Bao-cao-CD-thang-04-2023.xlsx',
                             sheet_name='PT')
     pt_f = pd.DataFrame(pt_file,
                         columns=['Danh sách hội viên', 'Giá trị 1 buổi'])

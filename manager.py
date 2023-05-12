@@ -90,6 +90,9 @@ class Manager(Employee):
         """
         Return the number of fixed salary for the month
         """
+        print(self.fixed_salary)
+        print(day_of_work)
+        print(self.expected_work_day)
         return (self.fixed_salary / self.expected_work_day) * day_of_work
 
     def get_total_salary(self) -> float:
@@ -99,13 +102,18 @@ class Manager(Employee):
         cc = get_actual_day_of_work()
         pp = get_performance_report()
 
-        day_of_w = cc.get(self.name)
+        day_of_w = cc.get(self.name) + + self.day_off
         performance = sum(pp.values())
 
         actual_fixed_sala = self.get_fixed_salary(day_of_work=day_of_w)
         num2 = self.get_commission(performance=performance)
         bonus = num2[0]
         percent_base = num2[1]
+
+        print(actual_fixed_sala)
+        print(performance)
+        print(percent_base)
+        print(bonus)
 
         return (actual_fixed_sala * percent_base) + bonus
 
